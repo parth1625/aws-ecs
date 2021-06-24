@@ -1,0 +1,1 @@
+# Docker ECS setup for Django project
