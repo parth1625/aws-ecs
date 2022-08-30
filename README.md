@@ -1,14 +1,13 @@
-# Docker ECS setup for Django project
+# Docker ECS setup for Django project with ECR
 
-## Run the docker-compose file to launch conatiner:
-    sudo docker-compose up
-    sudo docker-compose up -d
+## Retrieve an authentication token and authenticate your Docker client to your registry:
+    aws ecr get-login-password --region ap-south-1 | sudo docker login --username AWS --password-stdin 538082289860.dkr.ecr.ap-south-1.amazonaws.com
 
-## Commit/Create image of running container:
-    sudo docker commit <existing-container> <hub-user>/<repo-name>[:<tag>]
+## Build docker image:
+    sudo docker build -t django-ecs .
 
-## Login to Docker Hub:
-    sudo docker login
+## Tag your image:
+    sudo docker tag django-ecs:latest 538082289860.dkr.ecr.ap-south-1.amazonaws.com/django-ecs:latest
 
-## Push docker image to docker hub:
-    sudo docker push <hub-user>/<repo-name>:<tag>
+## Push docker image:
+    sudo docker push 538082289860.dkr.ecr.ap-south-1.amazonaws.com/django-ecs:latest
