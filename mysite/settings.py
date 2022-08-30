@@ -88,7 +88,7 @@ DATABASES = {
             'NAME': 'django_ecs',
             'USER': 'parth',
             'PASSWORD': 'redhat',
-            'HOST': 'db',
+            'HOST': 'localhost',
             'PORT': '5432'
     }
 }
