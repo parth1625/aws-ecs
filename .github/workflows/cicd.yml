@@ -60,4 +60,5 @@ jobs:
           service: django-svc
           cluster: django-cluster
           wait-for-service-stability: true
-          wait-for-minutes: 5
+          wait-for-minutes: 2
+          force-new-deployment: true
