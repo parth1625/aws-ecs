@@ -35,6 +35,6 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
         run: |
           echo $ECR_REGISTRY
-          docker build -t $ECR_REGISTRY/$REGISTRY_ALIAS/$ECR_REPOSITORY:$IMAGE_TAG -t -t $ECR_REGISTRY/$REGISTRY_ALIAS/$ECR_REPOSITORY:latest .
+          docker build -t $ECR_REGISTRY/$REGISTRY_ALIAS/$ECR_REPOSITORY:$IMAGE_TAG -t $ECR_REGISTRY/$REGISTRY_ALIAS/$ECR_REPOSITORY:latest .
           docker push $ECR_REGISTRY/$REGISTRY_ALIAS/$ECR_REPOSITORY -a
           # echo "::set-output name=image::public.ecr.aws/y2a7t2w8/$ECR_REPOSITORY:$IMAGE_TAG"
