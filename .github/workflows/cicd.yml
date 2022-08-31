@@ -42,7 +42,7 @@ jobs:
         run: |
           echo ${{ steps.build-image.outputs.image }}
           aws ecs describe-task-definition --task-definition first-run-task-definition --query taskDefinition > task-definition.json
-          echo task-definition.json
+          cat task-definition.json
 
       - name: Fill in the new image ID in the Amazon ECS task definition
         id: task-def
