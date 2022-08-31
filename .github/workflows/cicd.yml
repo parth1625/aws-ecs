@@ -58,6 +58,6 @@ jobs:
           task-definition: ${{ steps.task-def.outputs.task-definition }}
           service: django-svc
           cluster: django-cluster
-          # wait-for-service-stability: true
-          # wait-for-minutes: 2
+          wait-for-service-stability: true
+          wait-for-minutes: 3
           force-new-deployment: true
