@@ -35,6 +35,10 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
         run: |
           echo $ECR_REGISTRY
-          docker build -t $ECR_REGISTRY/$REGISTRY_ALIAS/$ECR_REPOSITORY:$IMAGE_TAG -t $ECR_REGISTRY/$REGISTRY_ALIAS/$ECR_REPOSITORY:latest .
-          docker push $ECR_REGISTRY/$REGISTRY_ALIAS/$ECR_REPOSITORY -a
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          ./aws/install
+          aws --version
+          # docker build -t $ECR_REGISTRY/$REGISTRY_ALIAS/$ECR_REPOSITORY:$IMAGE_TAG -t $ECR_REGISTRY/$REGISTRY_ALIAS/$ECR_REPOSITORY:latest .
+          # docker push $ECR_REGISTRY/$REGISTRY_ALIAS/$ECR_REPOSITORY -a
           # echo "::set-output name=image::public.ecr.aws/y2a7t2w8/$ECR_REPOSITORY:$IMAGE_TAG"
