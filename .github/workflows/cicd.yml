@@ -28,36 +28,40 @@ jobs:
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
         env:
-          ECR_REGISTRY: public.ecr.aws
-          REGISTRY_ALIAS: y2a7t2w8
-          ECR_REPOSITORY: ecsdjangorepo
+          # ECR_REGISTRY: public.ecr.aws
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          # REGISTRY_ALIAS: y2a7t2w8
+          # ECR_REPOSITORY: ecsdjangorepo
+          ECR_REPOSITORY: djangoapp-ecs
           IMAGE_TAG: ${{ github.sha }}
         run: |
           aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/y2a7t2w8
-          docker build -t $ECR_REGISTRY/$REGISTRY_ALIAS/$ECR_REPOSITORY:$IMAGE_TAG -t $ECR_REGISTRY/$REGISTRY_ALIAS/$ECR_REPOSITORY:latest .
-          docker push $ECR_REGISTRY/$REGISTRY_ALIAS/$ECR_REPOSITORY -a
+          # docker build -t $ECR_REGISTRY/$REGISTRY_ALIAS/$ECR_REPOSITORY:$IMAGE_TAG -t $ECR_REGISTRY/$REGISTRY_ALIAS/$ECR_REPOSITORY:latest .
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
+          # docker push $ECR_REGISTRY/$REGISTRY_ALIAS/$ECR_REPOSITORY -a
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY -a
           echo "::set-output name=image::$ECR_REGISTRY/$REGISTRY_ALIAS/$ECR_REPOSITORY:latest"
 
-      - name: Download task definition
-        run: |
-          echo ${{ steps.build-image.outputs.image }}
-          aws ecs describe-task-definition --task-definition first-run-task-definition --query taskDefinition > task-definition.json
-          cat task-definition.json
+      # - name: Download task definition
+      #   run: |
+      #     echo ${{ steps.build-image.outputs.image }}
+      #     aws ecs describe-task-definition --task-definition first-run-task-definition --query taskDefinition > task-definition.json
+      #     cat task-definition.json
 
-      - name: Fill in the new image ID in the Amazon ECS task definition
-        id: task-def
-        uses: aws-actions/amazon-ecs-render-task-definition@v1
-        with:
-          task-definition: task-definition.json
-          container-name: django-c1
-          image: ${{ steps.build-image.outputs.image }}
+      # - name: Fill in the new image ID in the Amazon ECS task definition
+      #   id: task-def
+      #   uses: aws-actions/amazon-ecs-render-task-definition@v1
+      #   with:
+      #     task-definition: task-definition.json
+      #     container-name: django-c1
+      #     image: ${{ steps.build-image.outputs.image }}
 
-      - name: Deploy Amazon ECS task definition
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-        with:
-          task-definition: ${{ steps.task-def.outputs.task-definition }}
-          service: django-svc
-          cluster: django-cluster
-          wait-for-service-stability: true
-          wait-for-minutes: 3
-          force-new-deployment: true
+      # - name: Deploy Amazon ECS task definition
+      #   uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      #   with:
+      #     task-definition: ${{ steps.task-def.outputs.task-definition }}
+      #     service: django-svc
+      #     cluster: django-cluster
+      #     wait-for-service-stability: true
+      #     wait-for-minutes: 3
+      #     force-new-deployment: true
